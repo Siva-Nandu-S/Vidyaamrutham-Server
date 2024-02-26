@@ -41,8 +41,22 @@ async function getAttendance(id) {
   }
 }
 
+async function getAchievement(id) {
+  try {
+    const result = await db.query(
+      `select * from achievement  where student_id = ${id}`
+    );
+    console.log(result);
+    return result;
+  } catch (err) {
+    console.log(err);
+  }
+
+}
+
 module.exports = {
   login,
   getStudent,
   getAttendance,
+  getAchievement,
 };

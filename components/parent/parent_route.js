@@ -54,4 +54,22 @@ router.get("/parent/attendance/:id", async (req, res) => {
     }
 });
 
+router.get("/parent/achievements/:id", async (req, res) => {
+    const id = req.params.id;
+    console.log(id, "parent achievement");
+    try {
+        result = await databaseInteractor.getAchievement(id);
+        if(result.length > 0){
+            result = result[0];
+            console.log(result);
+            res.status(200).json({result: result});
+        }
+        else{
+            res.status(400).send("Error");
+        }
+    } catch (err) {
+        console.log(err);
+    }
+});
+
 module.exports = router;
