@@ -9,13 +9,6 @@ const mentorRoute = require("./components/mentor/mentor_route");
 const dlsaRoute = require("./components/dlsa/dlsa_route");
 
 app.use(express.json());
-app.use(
-  cors({
-    origin: ["http://localhost:5173"],
-    credentials: true,
-    preflightContinue: true,
-  })
-);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
@@ -24,6 +17,6 @@ app.use(teacherRoute);
 app.use(mentorRoute);
 app.use(dlsaRoute);
 
-app.listen(3001, () => {
+app.listen(12000, () => {
   console.log("Server is running on port 3001");
 });
