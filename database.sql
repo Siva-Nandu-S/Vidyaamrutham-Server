@@ -90,6 +90,25 @@ create table achievement(
     foreign key(student_id) references student(id)
 );
 
+create table exam(
+    exam_id int primary key auto_increment,
+    name varchar(100) not null,
+    class varchar(100) not null,
+    division varchar(100) not null,
+    date varchar(100) not null,
+    subject varchar(100) not null,
+    marks int not null
+);
+
+create table exam_result(
+    student_id int not null,
+    exam_id int not null,
+    mark int not null,
+    primary key(student_id, exam_id),
+    foreign key(student_id) references student(id),
+    foreign key(exam_id) references exam(exam_id)
+);
+
 insert into mentor values
 ('mentor1', 'Rahul Srivastava', '1234567890', 'Delhi', 'rahul@gmail', 'male'),
 ('mentor2', 'Rohit Srivastava', '1234567890', 'Delhi', 'rohit123@yahoo', 'male'),

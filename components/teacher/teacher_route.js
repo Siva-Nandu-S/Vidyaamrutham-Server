@@ -104,4 +104,54 @@ router.get("/teacher/student/:class/:section", async (req, res) => {
   }
 });
 
+router.post("/teacher/publish/exam", async (req, res) => {
+  const {name, examClass, division, date, marks, subject} = req.body;
+  console.log(name, date, marks, subject, "teacher exam");
+
+  try {
+    const result = await databaseInteractor.publishExam(name, examClass, division, date, marks, subject);
+    if (result.status === "Success") {
+      res.status(200).json({ result: result.status });
+    } else {
+      res.status(400).json({ result: result.status });
+    }
+  } catch (err) {
+    console.log(err);
+    console.log("error from route file teacher exam");
+    res.status(400).send(err);
+  }
+});
+
+router.get("/exams", async (req, res) => {
+  try {
+    const result = await databaseInteractor.getExams();
+    if (result.length > 0) {
+      res.status(200).json({ result: result[0] });
+    } else {
+      res.status(400).send("Error");
+    }
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+router.post("/teacher/exams/:exam_id/result", async (req, res) => {
+  const { exam_id } = req.params;
+  const { marks } = req.body;
+  console.log(exam_id, marks, "teacher exam result");
+
+  try {
+    const result = await databaseInteractor.publishResult(exam_id, marks);
+    if (result.status === "Success") {
+      res.status(200).json({ result: result.status });
+    } else {
+      res.status(400).json({ result: result.status });
+    }
+  } catch (err) {
+    console.log(err);
+    console.log("error from route file teacher exam result");
+    res.status(400).send(err);
+  }
+});
+
 module.exports = router;
