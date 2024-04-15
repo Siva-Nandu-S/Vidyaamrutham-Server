@@ -17,6 +17,6 @@ app.use(teacherRoute);
 app.use(mentorRoute);
 app.use(dlsaRoute);
 
-app.listen(12000, () => {
+app.listen(3001, () => {
   console.log("Server is running on port 3001");
 });
