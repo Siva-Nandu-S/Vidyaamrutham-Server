@@ -97,6 +97,7 @@ create table exam(
     division varchar(100) not null,
     date varchar(100) not null,
     subject varchar(100) not null,
+    state int not null,
     marks int not null
 );
 
@@ -108,6 +109,25 @@ create table exam_result(
     foreign key(student_id) references student(id),
     foreign key(exam_id) references exam(exam_id)
 );
+
+create table announcement(
+    announcement_id int primary key auto_increment,
+    date date not null,
+    announcement varchar(255) not null
+);
+
+create table assignment(
+    assigment_id int primary key auto_increment,
+    date date not null,
+    subject varchar(100) not null,
+    class varchar(100) not null,
+    division varchar(100) not null,
+    teacher_id varchar(100) not null,
+    title varchar(100) not null,
+    description varchar(255) not null,
+    deadline date not null
+);
+
 
 insert into mentor values
 ('mentor1', 'Rahul Srivastava', '1234567890', 'Delhi', 'rahul@gmail', 'male'),
@@ -262,3 +282,15 @@ insert into achievement values
 (8, '2021-01-04', '3rd in English', 3),
 (9, '2021-01-04', '4th in Hindi', 4),
 (10, '2021-01-04', '5th in Social', 5);
+
+insert into announcement values
+(1, '2021-01-01', 'School will remain closed on 2nd January'),
+(2, '2021-01-02', 'School will remain closed on 3rd January'),
+(3, '2021-01-03', 'School will remain closed on 4th January'),
+(4, '2021-01-04', 'School will remain closed on 5th January'),
+(5, '2021-01-05', 'School will remain closed on 6th January');
+
+insert into assignment values 
+(1, '2021-01-01', 'Maths', '10', 'A', 'teacher1', 'Algebra', 'Solve the given questions', '2021-01-10'),
+(2, '2021-01-01', 'Science', '10', 'A', 'teacher2', 'Physics', 'Solve the given questions', '2021-01-10'),
+(3, '2021-01-01', 'English', '10', 'A', 'teacher3', 'Grammar', 'Solve the given questions', '2021-01-10');
