@@ -89,7 +89,7 @@ async function getStudentProfiles(grade, section) {
 async function publishExam(name, examClass, division, date, marks, subject) {
   try {
     const result = await db.query(
-      `insert into exam (name, class, division, date, marks, subject) values ('${name}', '${examClass}', '${division}', '${date}', ${marks}, '${subject}')`
+      `insert into exam (name, class, division, date, marks, subject, state) values ('${name}', '${examClass}', '${division}', '${date}', ${marks}, '${subject}', 0)`
     );
     console.log(result);
     return { status: "Success" };
@@ -101,22 +101,127 @@ async function publishExam(name, examClass, division, date, marks, subject) {
 
 async function getExams() {
   try {
-    const result = await db.query(`select * from exam`);
+    const result = await db.query(`select * from exam where state=0`);
     console.log(result);
     return result;
-  }
-  catch (err) {
+  } catch (err) {
     console.log(err);
   }
 }
 
-async function publishResult(exam_id, marks) {
+async function publishResult(exam_id, mark) {
   try {
-    for(let i=0; i<Object.keys(marks).length; i++){
-      const result = await db.query(
-        `insert into result (exam_id, student_id, marks) values (${exam_id}, ${Object.keys(marks)[i]}, ${marks[Object.keys(marks)[i]]})`
+    let result;
+    for (let i = 0; i < Object.keys(mark).length; i++) {
+      result = await db.query(
+        `insert into exam_result (exam_id, student_id, mark) values (${exam_id}, ${
+          Object.keys(mark)[i]
+        }, ${mark[Object.keys(mark)[i]]})`
       );
     }
+    console.log(result);
+
+    result = await db.query(`update exam set state=1 where exam_id=${exam_id}`);
+    return { status: "Success" };
+  } catch (err) {
+    console.log(err);
+    return { status: "Error" };
+  }
+}
+
+async function getAnnouncements() {
+  try {
+    const result = await db.query(`select * from announcement`);
+    console.log(result);
+    return result;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+async function publishAnnouncement(announcement, date) {
+  try {
+    const result = await db.query(
+      `insert into announcement (announcement,date) values ('${announcement}','${date}')`
+    );
+    console.log(result);
+    return { status: "Success" };
+  } catch (err) {
+    console.log(err);
+    return { status: "Error" };
+  }
+}
+
+async function deleteAnnouncement(announcement_id) {
+  try {
+    const result = await db.query(
+      `delete from announcement where announcement_id=${announcement_id}`
+    );
+    console.log(result);
+    return { status: "Success" };
+  } catch (err) {
+    console.log(err);
+    return { status: "Error" };
+  }
+}
+
+async function getAssignments() {
+  try {
+    const result = await db.query(`select * from assignment`);
+    console.log(result);
+    return result;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+async function publishAssignment(
+  title,
+  description,
+  grade,
+  division,
+  deadline,
+  subject,
+  date,
+  teacher_id
+) {
+  try {
+    const result = await db.query(
+      `insert into assignment (title, description, class, division, deadline, subject, date, teacher_id) values ('${title}', '${description}', ${grade}, '${division}', '${deadline}', '${subject}', '${date}', '${teacher_id}')`
+    );
+    console.log(result);
+    return { status: "Success" };
+  } catch (err) {
+    console.log(err);
+    return { status: "Error" };
+  }
+}
+
+async function getSubjects() {
+  try {
+    const result = await db.query(`select * from teacher`);
+    console.log(result);
+    return result;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+async function registerStudent(
+  name,
+  grade,
+  division,
+  roll_no,
+  address,
+  dob,
+  blood_group,
+  gender,
+  admission_no
+) {
+  try {
+    const result = await db.query(
+      `insert into student (name, class, section, roll_no, address, dob, blood_group, gender, admission_no) values ('${name}', ${grade}, '${division}', ${roll_no}, '${address}', '${dob}', '${blood_group}', '${gender}', ${admission_no})`
+    );
     console.log(result);
     return { status: "Success" };
   } catch (err) {
@@ -135,4 +240,10 @@ module.exports = {
   publishExam,
   getExams,
   publishResult,
+  getAnnouncements,
+  publishAnnouncement,
+  deleteAnnouncement,
+  getAssignments,
+  publishAssignment,
+  getSubjects,
 };
