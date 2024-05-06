@@ -117,4 +117,41 @@ router.get("/mentor/students/:grade/:section", async (req, res) => {
   }
 });
 
+router.get("/mentor/exams/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    console.log(id, "mentor exams");
+    try {
+      result = await databaseInteractor.getExams(id);
+      if (result.length > 0) {
+        result = result[0];
+        console.log(result);
+        res.status(200).json({ result: result });
+      } else {
+        res.status(400).send("Error");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+router.post("/mentor/instruction/:id", async (req, res) => {
+  const id = req.params.id;
+  const { instruction } = req.body;
+  console.log(id, instruction, "mentor instructions");
+  try {
+    result = await databaseInteractor.addInstructions(id, instruction);
+    if (result !== "Error") {
+      res.status(200).send("Success");
+    } else {
+      res.status(400).send("Error");
+    }
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 module.exports = router;

@@ -49,9 +49,10 @@ async function addAttendance(grade, section, date, attendance) {
         data = "Absent";
       }
       const result = await db.query(
-        `insert into attendance (class,section,student_id,status,date) values (${grade},'${section}',${
+        `insert into attendance (class,section,student_id,status,date) values 
+        (${grade},'${section}','${
           Object.keys(attendance)[i]
-        },'${data}','${date}')`
+        }','${data}','${date}')`
       );
     }
     result = { status: "Success" };
@@ -77,7 +78,7 @@ async function getProfile(id) {
 async function getStudentProfiles(grade, section) {
   try {
     const result = await db.query(
-      `select * from parent join student on student_id = id where class = ${grade} and section = '${section}'`
+      `select * from parent join student on parent.student_id = student.username where class = ${grade} and section = '${section}'`
     );
     console.log(result);
     return result;
@@ -114,9 +115,9 @@ async function publishResult(exam_id, mark) {
     let result;
     for (let i = 0; i < Object.keys(mark).length; i++) {
       result = await db.query(
-        `insert into exam_result (exam_id, student_id, mark) values (${exam_id}, ${
+        `insert into exam_result (exam_id, student_id, mark) values (${exam_id}, '${
           Object.keys(mark)[i]
-        }, ${mark[Object.keys(mark)[i]]})`
+        }', ${mark[Object.keys(mark)[i]]})`
       );
     }
     console.log(result);
@@ -216,11 +217,95 @@ async function registerStudent(
   dob,
   blood_group,
   gender,
-  admission_no
+  admission_no,
+  fatherName,
+  motherName,
+  fatherNumber,
+  motherNumber,
+  email,
+  studentUsername,
+  studentPassword,
+  parentUsername,
+  parentPassword
 ) {
   try {
+    const result1 = await db.query(
+      `insert into student (username ,name, class, section, roll_no, dob, blood_group, gender, admission_no) values ('${studentUsername}','${name}', ${grade}, '${division}', ${roll_no}, '${dob}', '${blood_group}', '${gender}', ${admission_no})`
+    );
+
+    const result2 = await db.query(
+      `insert into parent (username, father_name, mother_name, father_phone, mother_phone, address, email, student_id) values ('${parentUsername}', '${fatherName}', '${motherName}', '${fatherNumber}', '${motherNumber}', '${address}' , '${email}', '${studentUsername}')`
+    );
+
+    const result3 = await db.query(
+      `insert into student_password (username, password) values ('${studentUsername}', '${studentPassword}')`
+    );
+
+    const result4 = await db.query(
+      `insert into parent_password (username, password) values ('${parentUsername}', '${parentPassword}')`
+    );
+
+    console.log(result1);
+    return { status: "Success" };
+  } catch (err) {
+    console.log(err);
+    return { status: "Error" };
+  }
+}
+
+async function getStudentProfile(id) {
+  try {
     const result = await db.query(
-      `insert into student (name, class, section, roll_no, address, dob, blood_group, gender, admission_no) values ('${name}', ${grade}, '${division}', ${roll_no}, '${address}', '${dob}', '${blood_group}', '${gender}', ${admission_no})`
+      `select * from student join parent on student.username=parent.student_id where student.username='${id}'`
+    );
+    console.log(result);
+    return result[0];
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+async function updateStudent(
+  name,
+  grade,
+  division,
+  roll_no,
+  address,
+  dob,
+  blood_group,
+  gender,
+  admission_no,
+  fatherName,
+  motherName,
+  fatherNumber,
+  motherNumber,
+  email,
+  studentUsername,
+  studentPassword,
+  parentUsername,
+  parentPassword
+) {
+  try {
+    const result1 = await db.query(
+      `update student set name='${name}', class=${grade}, section='${division}', roll_no=${roll_no}, dob='${dob}', blood_group='${blood_group}', gender='${gender}', admission_no=${admission_no} where username='${studentUsername}'`
+    );
+
+    const result2 = await db.query(
+      `update parent set father_name='${fatherName}', mother_name='${motherName}', father_phone='${fatherNumber}', mother_phone='${motherNumber}', address='${address}', email='${email}' where username='${parentUsername}'`
+    );
+
+    console.log(result1);
+    return { status: "Success" };
+  } catch (err) {
+    console.log(err);
+    return { status: "Error" };
+  }
+}
+
+async function raiseGrievance(mentor_id, grievance, id) {
+  try {
+    const result = await db.query(
+      `insert into grievances (date, grievance, mentor_id, student_id) values (now(), '${grievance}', '${mentor_id}', '${id}')`
     );
     console.log(result);
     return { status: "Success" };
@@ -246,4 +331,8 @@ module.exports = {
   getAssignments,
   publishAssignment,
   getSubjects,
+  registerStudent,
+  getStudentProfile,
+  updateStudent,
+  raiseGrievance,
 };

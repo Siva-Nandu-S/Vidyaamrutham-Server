@@ -2,7 +2,9 @@ const db = require("../Database/db");
 
 async function getCount() {
   try {
-    const result_student = await db.query(`SELECT COUNT(id) FROM student`);
+    const result_student = await db.query(
+      `SELECT COUNT(username) FROM student`
+    );
     const result_mentor = await db.query(`SELECT COUNT(username) FROM mentor`);
 
     if (result_student.length > 0 && result_mentor.length > 0) {

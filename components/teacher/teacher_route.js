@@ -290,23 +290,42 @@ router.post("/teacher/register/student", async (req, res) => {
     name,
     grade,
     division,
-    roll_no,
+    rollNumber,
     address,
     dob,
-    blood_group,
+    bloodGroup,
     gender,
-    admission_no,
+    admissionNumber,
+    fatherName,
+    motherName,
+    fatherNumber,
+    motherNumber,
+    email,
+    studentUsername,
+    studentPassword,
+    parentUsername,
+    parentPassword,
   } = req.body;
+
   console.log(
     name,
     grade,
     division,
-    roll_no,
+    rollNumber,
     address,
     dob,
-    blood_group,
+    bloodGroup,
     gender,
-    admission_no
+    admissionNumber,
+    fatherName,
+    motherName,
+    fatherNumber,
+    motherNumber,
+    email,
+    studentUsername,
+    studentPassword,
+    parentUsername,
+    parentPassword
   );
 
   try {
@@ -314,12 +333,21 @@ router.post("/teacher/register/student", async (req, res) => {
       name,
       grade,
       division,
-      roll_no,
+      rollNumber,
       address,
       dob,
-      blood_group,
+      bloodGroup,
       gender,
-      admission_no
+      admissionNumber,
+      fatherName,
+      motherName,
+      fatherNumber,
+      motherNumber,
+      email,
+      studentUsername,
+      studentPassword,
+      parentUsername,
+      parentPassword
     );
     if (result.status === "Success") {
       res.status(200).json({ result: result.status });
@@ -329,6 +357,116 @@ router.post("/teacher/register/student", async (req, res) => {
   } catch (err) {
     console.log(err);
     console.log("error from route file teacher register student");
+    res.status(400).send(err);
+  }
+});
+
+router.get("/teacher/update/:student_id", async (req, res) => {
+  const student_id = req.params.student_id;
+  console.log(student_id, "teacher update student");
+
+  try {
+    const result = await databaseInteractor.getStudentProfile(student_id);
+    if (result.length > 0) {
+      res.status(200).json({ result: result[0] });
+    } else {
+      res.status(400).send("Error");
+    }
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+router.post("/teacher/update/student", async (req, res) => {
+  const {
+    name,
+    grade,
+    division,
+    rollNumber,
+    address,
+    dob,
+    bloodGroup,
+    gender,
+    admissionNumber,
+    fatherName,
+    motherName,
+    fatherNumber,
+    motherNumber,
+    email,
+    studentUsername,
+    studentPassword,
+    parentUsername,
+    parentPassword,
+  } = req.body;
+
+  console.log(
+    name,
+    grade,
+    division,
+    rollNumber,
+    address,
+    dob,
+    bloodGroup,
+    gender,
+    admissionNumber,
+    fatherName,
+    motherName,
+    fatherNumber,
+    motherNumber,
+    email,
+    studentUsername,
+    studentPassword,
+    parentUsername,
+    parentPassword
+  );
+
+  try {
+    const result = await databaseInteractor.updateStudent(
+      name,
+      grade,
+      division,
+      rollNumber,
+      address,
+      dob,
+      bloodGroup,
+      gender,
+      admissionNumber,
+      fatherName,
+      motherName,
+      fatherNumber,
+      motherNumber,
+      email,
+      studentUsername,
+      studentPassword,
+      parentUsername,
+      parentPassword
+    );
+    if (result.status === "Success") {
+      res.status(200).json({ result: result.status });
+    } else {
+      res.status(400).json({ result: result.status });
+    }
+  } catch (err) {
+    console.log(err);
+    console.log("error from route file teacher register student");
+    res.status(400).send(err);
+  }
+});
+
+router.post("/teacher/grievance", async (req, res) => {
+  const { mentor_id, grievance, id } = req.body;
+  console.log(mentor_id, grievance, id, "teacher grievances");
+
+  try {
+    const result = await databaseInteractor.raiseGrievance(mentor_id, grievance, id);
+    if (result.status === "Success") {
+      res.status(200).json({ result: result.status });
+    } else {
+      res.status(400).json({ result: result.status });
+    }
+  } catch (err) {
+    console.log(err);
+    console.log("error from route file teacher grievances");
     res.status(400).send(err);
   }
 });
