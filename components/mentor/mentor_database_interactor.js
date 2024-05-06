@@ -22,7 +22,7 @@ async function getStudent(id) {
     );
     const data = result[0];
     const count = await db.query(
-      `SELECT COUNT(id) FROM student WHERE mentor_id = '${id}'`
+      `SELECT COUNT(username) FROM student WHERE mentor_id = '${id}'`
     );
     if (result.length > 0) {
       console.log("count : ", count[0][0]);
@@ -57,7 +57,7 @@ async function getStudentCount(id) {
 async function getAttendance(id) {
   try {
     const result = await db.query(
-      `select * from attendance where student_id = ${id}`
+      `select * from attendance where student_id = "${id}"`
     );
     console.log(result);
     return result;
@@ -93,11 +93,40 @@ async function getProfile(id) {
 async function getStudentProfiles(grade, section) {
   try {
     const result = await db.query(
-      `select * from mentor join student on username = mentor_id where class = ${grade} and section = '${section}'`
+      `select * from mentor join student on mentor.username = student.mentor_id where class = ${grade} and section = '${section}'`
     );
     console.log(result);
     return result;
   } catch (err) {
+    console.log(err);
+  }
+}
+
+async function getExams(id) {
+  try {
+    const result = await db.query(
+      `select * from exam where class = (select class from student where username = '${id}') and division = (select section from student where username = '${id}') and state = 0`
+    );
+    console.log(result);
+    return result;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+async function addInstructions(instructions, id) {
+  try {
+    const data = await db.query(
+      `select username from parent where student_id = '${id}'`
+    );
+
+    const result = await db.query(
+      `insert into instruction_for_parents (date, student_id, instructions) values (now(), '${data[0]}', '${instructions}')`
+    );
+    console.log(result);
+    return result;
+  }
+  catch (err) {
     console.log(err);
   }
 }
@@ -110,4 +139,6 @@ module.exports = {
   getContent,
   getProfile,
   getStudentProfiles,
+  getExams,
+  addInstructions,
 };
