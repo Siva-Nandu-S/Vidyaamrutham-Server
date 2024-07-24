@@ -5,7 +5,7 @@ async function login(username, password) {
     const result = await db.query(
       `select * from student_password where username like '${username}' and password like '${password}'`
     );
-    if (result.length > 0) {
+    if (result[0].length > 0) {
       console.log(result);
       return { username: result[0].username, loggedIn: true };
     } else {
@@ -64,9 +64,9 @@ async function getHomeAttendance(id) {
   }
 }
 
-module.exports = { 
+module.exports = {
   login,
   getStudent,
   getHome,
   getHomeAttendance,
- };
+};

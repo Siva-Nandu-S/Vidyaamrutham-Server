@@ -5,7 +5,7 @@ async function login(username, password) {
     const result = await db.query(
       `select * from teacher_password where username like '${username}' and password like '${password}'`
     );
-    if (result.length > 0) {
+    if (result[0].length > 0) {
       console.log(result);
       return { username: result[0].username, loggedIn: true };
     } else {
@@ -315,6 +315,19 @@ async function raiseGrievance(mentor_id, grievance, id) {
   }
 }
 
+async function getLetter(){
+  try{
+    const result = await db.query(`select * from teacher_notes join parent on teacher_notes.parent_id = parent.username
+    join student on parent.student_id = student.username
+      `);
+    console.log(result);
+    return result;
+  }catch(err){
+    console.log(err);
+  }
+
+}
+
 module.exports = {
   login,
   getClasses,
@@ -335,4 +348,5 @@ module.exports = {
   getStudentProfile,
   updateStudent,
   raiseGrievance,
+  getLetter
 };

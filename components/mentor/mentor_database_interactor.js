@@ -5,7 +5,7 @@ async function login(username, password) {
     const result = await db.query(
       `SELECT * FROM mentor_password WHERE username = '${username}' AND password = '${password}'`
     );
-    if (result.length > 0) {
+    if (result[0].length > 0) {
       return "Success";
     } else {
       return "Error";
@@ -69,7 +69,7 @@ async function getAttendance(id) {
 async function getContent(id) {
   try {
     const result = await db.query(
-      `select * from parent join student on student_id = id where student_id in (select id from student where mentor_id like '${id}')`
+      `select * from parent join student on parent.student_id=student.username where student.username in (select username from student where mentor_id='${id}')`
     );
     console.log(result);
     return result;
@@ -114,19 +114,42 @@ async function getExams(id) {
   }
 }
 
-async function addInstructions(instructions, id) {
+async function addInstructions(id, instructions) {
   try {
     const data = await db.query(
       `select username from parent where student_id = '${id}'`
     );
 
+    console.log("data : ", data[0][0].username);
+
     const result = await db.query(
-      `insert into instruction_for_parents (date, student_id, instructions) values (now(), '${data[0]}', '${instructions}')`
+      `insert into instruction_for_parents (date, parent_id, instruction) values (curdate(), '${data[0][0].username}', '${instructions.note}')`
     );
     console.log(result);
     return result;
+  } catch (err) {
+    console.log(err);
   }
-  catch (err) {
+}
+
+async function getTeachers() {
+  try {
+    const result = await db.query(`select * from teacher`);
+    console.log(result);
+    return result;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+async function getUpdate(id) {
+  try {
+    const result = await db.query(
+      `select * from mentor where username = '${id}'`
+    );
+    console.log(result);
+    return result;
+  } catch (err) {
     console.log(err);
   }
 }
@@ -141,4 +164,6 @@ module.exports = {
   getStudentProfiles,
   getExams,
   addInstructions,
+  getTeachers,
+  getUpdate,
 };

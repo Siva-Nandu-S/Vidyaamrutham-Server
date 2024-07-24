@@ -40,12 +40,12 @@ create table student_password(
 
 create table parent(
     username varchar(100) primary key,
-    father_name varchar(100) not null,
-    mother_name varchar(100) not null,
-    father_phone varchar(100) not null,
+    father_name varchar(100),
+    mother_name varchar(100),
+    father_phone varchar(100),
     mother_phone varchar(100) not null,
     address varchar(100) not null,
-    email varchar(100) not null,
+    email varchar(100) ,
     student_id varchar(100) not null,
     foreign key(student_id) references student(username)
 );
@@ -204,6 +204,10 @@ insert into student values ('student6', 'Danny', '10', 'B', 25, '2000-01-01', 'O
 ('student8', 'Rohit', '10', 'B', 27, '2000-01-23', 'AB+ve', 'male', 1008, 'mentor6'),
 ('student9', 'Raj', '10', 'B', 28, '2000-01-21', 'O+ve', 'male', 1009, 'mentor4'),
 ('student10', 'Riya', '10', 'B', 29, '2000-01-28', 'B-ve', 'female', 1010, 'mentor7');
+
+insert into student (username, name, class, section, roll_no, dob, blood_group, gender, admission_no) values ('student11', 'Rani', '10', 'B', 30, '2000-01-28', 'O+ve', 'female', 1011);
+
+insert into student (username, name, class, section, roll_no, dob, blood_group, gender, admission_no) values ('student12', 'Akshay R S', '10', 'B', 30, '2000-01-28', 'O+ve', 'male', 1012);
 
 insert into student_password values('student6', 'danny123'),
 ('student7', 'rahul123'),

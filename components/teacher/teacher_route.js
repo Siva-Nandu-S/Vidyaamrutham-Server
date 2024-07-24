@@ -471,4 +471,17 @@ router.post("/teacher/grievance", async (req, res) => {
   }
 });
 
+router.get('/teacher/letters', async(req, res) => {
+  try{
+    const result = await databaseInteractor.getLetter();
+    if(result.length > 0){
+      res.status(200).json({result: result[0]});
+    }else{
+      res.status(400).send('Error');
+    }
+  }catch(err){
+    console.log(err);
+  }
+})
+
 module.exports = router;

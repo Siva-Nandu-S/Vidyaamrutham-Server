@@ -84,7 +84,7 @@ router.get("/student/attendance/home/:id", async (req, res) => {
     result = await databaseInteractor.getHomeAttendance(id);
     if (result !== "Error") {
       result = result;
-      console.log('result', result);
+      console.log("result", result);
       res.status(200).json({ result: result });
     } else {
       res.status(400).send("Error");

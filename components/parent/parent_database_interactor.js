@@ -5,7 +5,7 @@ async function login(username, password) {
     const result = await db.query(
       `select * from parent_password where username like '${username}' and password like '${password}'`
     );
-    if (result.length > 0) {
+    if (result[0].length > 0) {
       console.log(result);
       return { username: result[0].username, loggedIn: true };
     } else {
@@ -132,6 +132,19 @@ async function getRemarks(id) {
   }
 }
 
+async function getInstructions(username){
+  try {
+    const result = await db.query(
+      ` select * from instruction_for_parents where parent_id = '${username}'`
+    );
+    console.log(result[0]);
+    return result[0];
+  } catch (err) {
+    console.log(err);
+  }
+
+}
+
 module.exports = {
   login,
   getStudent,
@@ -143,4 +156,5 @@ module.exports = {
   getResult,
   getMentor,
   getRemarks,
+  getInstructions
 };
