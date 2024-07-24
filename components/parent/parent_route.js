@@ -8,7 +8,8 @@ router.post("/parent/login", async (req, res) => {
   console.log(username, password, "parent login");
   try {
     result = await databaseInteractor.login(username, password);
-    if (result !== "Error") {
+    console.log(result);
+    if (result != "Error") {
       result = { username: username, loggedIn: true };
       res.status(200).json(result);
     } else {
@@ -100,71 +101,86 @@ router.post("/parent/note/mentor", async (req, res) => {
 });
 
 router.get("/parent/exams/:id", async (req, res) => {
-    const id = req.params.id;
-    console.log(id, "parent exams");
-    try {
-        result = await databaseInteractor.getExams(id);
-        if (result.length > 0) {
-        result = result[0];
-        console.log(result);
-        res.status(200).json({ result: result });
-        } else {
-        res.status(400).send("Error");
-        }
-    } catch (err) {
-        console.log(err);
+  const id = req.params.id;
+  console.log(id, "parent exams");
+  try {
+    result = await databaseInteractor.getExams(id);
+    if (result.length > 0) {
+      result = result[0];
+      console.log(result);
+      res.status(200).json({ result: result });
+    } else {
+      res.status(400).send("Error");
     }
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 router.get("/parent/result/:id", async (req, res) => {
-    const id = req.params.id;
-    console.log(id, "parent result");
-    try {
-        result = await databaseInteractor.getResult(id);
-        if (result.length > 0) {
-        result = result[0];
-        console.log(result);
-        res.status(200).json({ result: result });
-        } else {
-        res.status(400).send("Error");
-        }
-    } catch (err) {
-        console.log(err);
+  const id = req.params.id;
+  console.log(id, "parent result");
+  try {
+    result = await databaseInteractor.getResult(id);
+    if (result.length > 0) {
+      result = result[0];
+      console.log(result);
+      res.status(200).json({ result: result });
+    } else {
+      res.status(400).send("Error");
     }
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 router.get("/parent/mentor/:id", async (req, res) => {
-    const id = req.params.id;
-    console.log(id, "parent mentor");
-    try {
-        result = await databaseInteractor.getMentor(id);
-        if (result.length > 0) {
-        result = result[0];
-        console.log(result);
-        res.status(200).json({ result: result });
-        } else {
-        res.status(400).send("Error");
-        }
-    } catch (err) {
-        console.log(err);
+  const id = req.params.id;
+  console.log(id, "parent mentor");
+  try {
+    result = await databaseInteractor.getMentor(id);
+    if (result.length > 0) {
+      result = result[0];
+      console.log(result);
+      res.status(200).json({ result: result });
+    } else {
+      res.status(400).send("Error");
     }
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 router.get("/parent/remarks/:id", async (req, res) => {
-    const id = req.params.id;
-    console.log(id, "parent remarks");
-    try {
-        result = await databaseInteractor.getRemarks(id);
-        if (result.length > 0) {
-        result = result[0];
-        console.log(result);
-        res.status(200).json({ result: result });
-        } else {
-        res.status(400).send("Error");
-        }
-    } catch (err) {
-        console.log(err);
+  const id = req.params.id;
+  console.log(id, "parent remarks");
+  try {
+    result = await databaseInteractor.getRemarks(id);
+    if (result.length > 0) {
+      result = result[0];
+      console.log(result);
+      res.status(200).json({ result: result });
+    } else {
+      res.status(400).send("Error");
     }
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+router.get("/parent/instructions/:username", async(req, res) => {
+  const username = req.params.username;
+  console.log(username, "parent instructions");
+  try {
+    let result = await databaseInteractor.getInstructions(username);
+
+    console.log(result);
+
+    res.status(200).json({ result: result });
+  } catch (err) {
+    console.log(err);
+    res.status(400).send("Error");
+  }
 });
 
 module.exports = router;

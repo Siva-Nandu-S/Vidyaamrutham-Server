@@ -140,8 +140,9 @@ router.get("/mentor/exams/:id", async (req, res) => {
 
 router.post("/mentor/instruction/:id", async (req, res) => {
   const id = req.params.id;
-  const { instruction } = req.body;
+  const instruction = req.body;
   console.log(id, instruction, "mentor instructions");
+  console.log(typeof instruction);
   try {
     result = await databaseInteractor.addInstructions(id, instruction);
     if (result !== "Error") {
@@ -153,5 +154,50 @@ router.post("/mentor/instruction/:id", async (req, res) => {
     console.log(err);
   }
 });
+
+router.get("/mentor/teacher", async (req, res) => {
+  try {
+    result = await databaseInteractor.getTeachers();
+    if (result.length > 0) {
+      res.status(200).json({ result: result[0] });
+    } else {
+      res.status(400).send("Error");
+    }
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+router.post("/mentor/teacher/:id",async(req,res)=>{
+  const id = req.params.id;
+  const {data} = req.body;
+  console.log(id,teacher_id,"mentor teacher");
+  try{
+    result = await databaseInteractor.letterToTeacher(id,teacher_id);
+    if(result !== "Error"){
+      res.status(200).send("Success");
+    }else{
+      res.status(400).send("Error");
+    }
+  }catch(err){
+    console.log(err);
+  }
+})
+
+router.get("/mentor/update/:id", async (req, res) => {
+  const id = req.params.id;
+  console.log(id, "mentor update");
+  try {
+    result = await databaseInteractor.getUpdate(id);
+    if (result.length > 0) {
+      res.status(200).json({ result: result[0][0] });
+    } else {
+      res.status(400).send("Error");
+    }
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 
 module.exports = router;

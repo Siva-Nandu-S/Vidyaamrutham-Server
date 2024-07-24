@@ -10,6 +10,7 @@ const mentorRoute = require("./components/mentor/mentor_route");
 const dlsaRoute = require("./components/dlsa/dlsa_route");
 const studentRoute = require("./components/student/student_route");
 
+app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -20,15 +21,6 @@ app.use(mentorRoute);
 app.use(dlsaRoute);
 app.use(studentRoute);
 
-const server = app.listen(3001, () => {
-  console.log("Server is running on port 3002");
-
-  (async () => {
-    const tunnel = await localtunnel({
-      port: 3001,
-      subdomain: "dlsatestserver",
-    });
-
-    console.log(`Server is accessible publicly at ${tunnel.url}`);
-  })();
+app.listen(8080, () => {
+  console.log("Server is running on port 8080");
 });
